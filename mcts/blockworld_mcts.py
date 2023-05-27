@@ -9,10 +9,10 @@ import warnings
 from collections import defaultdict
 from copy import deepcopy
 import torch
-from utils.blocksworld import apply_change, generate_all_actions
+from mcts.utils.blocksworld import apply_change, generate_all_actions
 
 from mcts.mcts import MCTS, MCTSNode
-from models import QueryLM
+from mcts.models import QueryLM
 from tqdm import tqdm, trange
 import numpy as np
 

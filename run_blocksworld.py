@@ -117,7 +117,7 @@ verbose_template="""
 
 class ReasoningTasks():
 
-    def __init__(self, verbose=False, model_name="13B", data_path=""):
+    def __init__(self, verbose=False, model_name="LLaMA", ckpt_path="", data_path=""):
         # self.engine = engine
         self.verbose = verbose
         self.max_gpt_response_length = 500
@@ -135,17 +135,16 @@ class ReasoningTasks():
 
         self.local_rank = local_rank
 
-        if self.model_name == "13B":
-            llm = "/home/shibo/llama-ckpts/13B"
-        elif self.model_name == "30B":
-            llm = "/home/shibo/llama-ckpts/30B"
+        if self.model_name == "LLaMA":
+            llm = ckpt_path
+            # the parent directory of the checkpoint directory
+            tokenizer_path = os.path.join(os.path.dirname(llm), "tokenizer.model")
+            # print(tokenizer_path)
+            llama = load(llm, tokenizer_path, local_rank, world_size, 3)
+            self.model = QueryLlama(llama, max_response_length=100, log_file=log_file)
         else:
             raise NotImplementedError
-        # the parent directory of the checkpoint directory
-        tokenizer_path = os.path.join(os.path.dirname(llm), "tokenizer.model")
-        # print(tokenizer_path)
-        llama = load(llm, tokenizer_path, local_rank, world_size, 3)
-        self.model = QueryLlama(llama, max_response_length=100, log_file=log_file)
+        
 
     # ========================================== UTILS ========================================== #
     def compute_plan(self, domain, instance, timeout=30):
@@ -313,7 +312,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', type=str, default='mcts', help='Task to run t1 = Goal Directed Reasoning')
-    parser.add_argument('--model_name', type=str, default='30B', help='Model to use')
+    parser.add_argument('--model_name', type=str, default='LLaMA', help='Model to use')
     parser.add_argument('--verbose', type=str, default="False", help='Verbose')
     parser.add_argument('--name', type=str, default="unnamed", help='Name of the experiment')
     parser.add_argument('--data_path', type=str, default="data", help='Path to data')
@@ -322,6 +321,8 @@ if __name__ == '__main__':
     parser.add_argument('--alpha', type=float, default=0.5, help='Alpha for reward')
     parser.add_argument('--n_samples', type=int, default=10, help='Number of samples for t1')
     parser.add_argument('--prompt_path', type=str, default="data/blocksworld/my_mcts_prompts_update.json", help='Path to prompts')
+    parser.add_argument('--ckpt_path', type=str, default="", help='path to LLaMA checkpoint')
+
 
     args = parser.parse_args()
     task = args.task
@@ -334,8 +335,10 @@ if __name__ == '__main__':
     name = args.name
     max_depth = args.max_depth
     verbose = eval(args.verbose)
+    prompt_path = args.prompt_path
+    ckpt_path = args.ckpt_path
 
-    tasks_obj = ReasoningTasks(verbose, model_name=model_name, data_path=data_path)
+    tasks_obj = ReasoningTasks(verbose, model_name=model_name, data_path=data_path, ckpt_path=ckpt_path)
 
     if task == 'mcts':
         config_file = 'data/blocksworld/bw_config.yaml'
