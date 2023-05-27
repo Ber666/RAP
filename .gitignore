@@ -2,6 +2,6 @@
 __pycache__/
 logs/
 *.log
-gpt_sas_plan/
+gpt_sas_plan
 gpt-plan-benchmark/
 outputs/

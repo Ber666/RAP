@@ -9,10 +9,10 @@ import warnings
 from collections import defaultdict
 from copy import deepcopy
 import torch
-from mcts.utils.blocksworld import apply_change, generate_all_actions
+from rap.utils.blocksworld import apply_change, generate_all_actions
 
-from mcts.mcts import MCTS, MCTSNode
-from mcts.models import QueryLM
+from rap.mcts import MCTS, MCTSNode
+from rap.models import QueryLM
 from tqdm import tqdm, trange
 import numpy as np
 
@@ -136,12 +136,8 @@ def reasoning_mcts_search(initial_state: str,
                           r_alpha,
                           r1_default,
                           eos_token_id,
-                          speedup_action_batch_size=2, 
-                          validator=None,
+                          speedup_action_batch_size=2,
                           w_exp=1):
-
-    assert validator is not None
-    
 
     def gen_fn(inp, depth):
         print("# in gen_fn")

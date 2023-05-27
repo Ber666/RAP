@@ -14,8 +14,8 @@ import random
 import numpy as np
 import subprocess
 
-from mcts.blockworld_mcts import reasoning_mcts_search
-from mcts.models import WorldModel, AgentModel, QueryLlama
+from rap.blocksworld_mcts import reasoning_mcts_search
+from rap.models import WorldModel, AgentModel, QueryLlama
 
 import torch
 from llama import *
@@ -30,6 +30,8 @@ def validate_plan(domain, instance, plan_file):
     val_path = os.getenv("VAL")
     cmd = f"{val_path}/validate {domain} {instance} {plan_file}"
     response = os.popen(cmd).read()
+
+    print("RESPONSE:::", response)
     if 'Problem in domain' in response:
         raise Exception('Problem in domain: Check PDDL Writer')
 
@@ -37,35 +39,7 @@ def validate_plan(domain, instance, plan_file):
         return True, response
     else:
         return False, response
-    
-def get_validator(domain, instance, plan_file, problem, data):
-    def validate_plan(text):
-        _, lm_plan = text_to_plan_blocksworld(text, problem.actions, plan_file, data)
-        val_path = os.getenv("VAL")
-        cmd = f"{val_path}/validate {domain} {instance} {plan_file}"
-        response = os.popen(cmd).read()
-        '''
-        print("=======================")
-        print("text", text)
-        print("plan", _)
-        print("lm_plan", lm_plan)
-        print("instance", instance)
-        print("cmd", cmd)
 
-        print("response", response)
-        print("=======================")
-        '''
-        if 'Problem in domain' in response:
-            raise Exception('Problem in domain: Check PDDL Writer')
-
-        if "Plan valid" in response:
-            return "FINISHED"
-        elif "Plan executed successfully" in response:
-            return "VALID"
-        else:
-            return "INVALID"
-        
-    return validate_plan
 
 def setup_model_parallel() -> Tuple[int, int]:
     local_rank = int(os.environ.get("LOCAL_RANK", -1))
@@ -228,7 +202,7 @@ class ReasoningTasks():
             query = prompts["baseline_action"]
             # gt_plan = self.compute_plan(domain_pddl, cur_instance)
             query += fill_template(*instance_to_text_blocksworld(problem, False, self.data)) + "\n"
-            validator = get_validator(domain_pddl, cur_instance[0], "gpt_sas_plan", problem, data=self.data)
+            
             trajs, tree, trees = reasoning_mcts_search(
                 f'I have that, {INIT}.', 
                 f'My goal is to have that {GOAL}.',
@@ -240,8 +214,7 @@ class ReasoningTasks():
                 n_sample_confidence=10,
                 r1_default=0.5,
                 eos_token_id=self.model.tokenizer.encode('\n', bos=False, eos=False)[-1],
-                r_alpha=alpha,
-                validator=validator)
+                r_alpha=alpha)
 
             torch.distributed.barrier()
 
