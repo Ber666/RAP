@@ -4,7 +4,7 @@ Source code for the paper [Reasoning with Language Model is Planning with World 
 
 # Requirements
 
-- Our experiments are conducted with LLaMA-33B, which takes at least 4 GPUs of 24GB memory each. The code also supports smaller LLaMA models, but other LLMs (e.g. those from Huggingface) are not tested.
+- Our experiments are conducted with LLaMA-33B, which takes at least 4 GPUs of 24GB memory each. The code also supports smaller LLaMA models, but other LLMs (e.g. those from Hugging Face) are not tested.
 
 - All required packages for [LLaMA official repo](https://github.com/facebookresearch/llama).
 
