@@ -112,10 +112,6 @@ class MCTS:
         return max((self.max_mean_terminal(child, sum + cur.reward, cnt + 1) for child in self.children[cur]), key=lambda x: x[1])
 
     def _back_propagate(self, path: list[MCTSNode], reward=0.):
-        # cum_reward = sum(n.reward for n in path)
-        # if cum_reward > self.max_reward:
-        #     self.max_reward = cum_reward
-        #     self.max_terminal = path[-1]
         coeff = 1
         for node in reversed(path):
             reward = reward * self.discount + node.reward
@@ -132,13 +128,12 @@ class MCTS:
             self.M[node] = max(self.M[node], c_reward)
 
     def _uct(self, node: MCTSNode, log_n_f: float):
-        print("# in _uct (reward, uct)")
-
+        # print("# in _uct (reward, uct)")
         if self.prior and self.N[node] == 0:
-            print("## unexplored: ", node.reward, node.reward + self.w_exp * math.sqrt(log_n_f))
+            # print("## unexplored: ", node.reward, node.reward + self.w_exp * math.sqrt(log_n_f))
             return node.reward + self.w_exp * math.sqrt(log_n_f)
         if self.aggr_child == 'max':
-            print("## explored: ", self.N[node], self.M[node], self.w_exp * math.sqrt(log_n_f / self.N[node]))
+            # print("## explored: ", self.N[node], self.M[node], self.w_exp * math.sqrt(log_n_f / self.N[node]))
             return self.M[node] + self.w_exp * math.sqrt(log_n_f / self.N[node])
         elif self.aggr_child == 'mean':
             return self.Q[node] / self.N[node] + self.w_exp * math.sqrt(log_n_f / self.N[node])
