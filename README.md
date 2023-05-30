@@ -23,5 +23,9 @@ Source code for the paper [Reasoning with Language Model is Planning with World 
 - Use `python run_gsm8k.py -- --help` for details about arguments
 - For RAP-Aggregation, after running RAP on GSM8k, run `python aggregate_gsm8k.py --log-dir <log_dir>`
 
+## ProntoQA
+- Run with: ```CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --nproc_per_node 4 --master-port 1074 run_prontoqa.py --llama-ckpt $LLAMA_CKPTS/30B```
+- Use `python run_prontoqa.py -- --help` for details about arguments
+
 ## Other datasets
 To be updated...
