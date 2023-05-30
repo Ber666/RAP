@@ -19,7 +19,7 @@ Source code for the paper [Reasoning with Language Model is Planning with World 
 - Run the command: ```CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.run --master_port 1034 --nproc_per_node 4 run_blocksworld.py --task mcts --model_name LLaMA --ckpt_path $LLAMA_CKPTS/30B --verbose True --data data/blocksworld/step_4.json --max_depth 4 --name run_4_May26_max_depth_4_alpha_05_rollouts_10 --rollouts 10```
 
 ## GSM8k
-- Run with: ```CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --nproc_per_node 4 --master-port 1054 run_gsm8k.py --llama-ckpt $LLAMA_CKPTS/30B```
+- Run with: ```CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --nproc_per_node 4 --master-port 1054 run_gsm8k.py --llama-ckpt $LLAMA_CKPTS/30B --speedup-confidence-batch-size 2```
 - Use `python run_gsm8k.py -- --help` for details about arguments
 - For RAP-Aggregation, after running RAP on GSM8k, run `python aggregate_gsm8k.py --log-dir <log_dir>`
 
