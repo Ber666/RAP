@@ -15,7 +15,7 @@ import numpy as np
 import subprocess
 
 from rap.blocksworld_mcts import reasoning_mcts_search
-from rap.models import WorldModel, AgentModel, QueryLlama
+from rap.models import QueryLlama
 
 import torch
 from llama import *
