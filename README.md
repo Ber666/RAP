@@ -1,5 +1,5 @@
 # RAP: Reasoning via Planning
-**News!** We released [LLM Reasoners](https://github.com/Ber666/llm-reasoners) library, a library for complex reasoning with LLMs, and include the code to reproduce some experiments in RAP. Give it a try!
+**News!** We released [LLM Reasoners](https://github.com/Ber666/llm-reasoners), a library for complex reasoning with LLMs, and include the code to reproduce some experiments in RAP. Give it a try!
 
 ---
 Source code for the paper [Reasoning with Language Model is Planning with World Model](https://arxiv.org/abs/2305.14992)
