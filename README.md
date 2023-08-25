@@ -7,6 +7,8 @@ Source code for the paper [Reasoning with Language Model is Planning with World 
 
 # Preparation
 
+- **Warning**: This code only supports LLaMA-1. Check our new library [LLM Reasoners](https://github.com/Ber666/llm-reasoners) for more flexible choices of LLMs.
+
 - Our experiments are conducted with LLaMA-33B, which takes at least 4 GPUs of 24GB memory each. The code also supports smaller LLaMA models, but other LLMs (e.g. those from Hugging Face) are not tested.
 
 - Acquire the checkpoints of LLaMA from MetaAI following the [LLaMA official repo](https://github.com/facebookresearch/llama) and set up the environment variable: ```export LLAMA_CKPTS="YOUR_PATH_TO_LLAMA_CHECKPOINTS"```
