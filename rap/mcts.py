@@ -66,7 +66,7 @@ class MCTS:
         path = []
         while True:
             path.append(node)
-            if node not in self.children or node.is_terminal:
+            if node not in self.children or node.is_terminal or not self.children[node]:
                 return path
             for child in self.children[node]:
                 if child not in self.children.keys():
@@ -94,7 +94,7 @@ class MCTS:
                 return cur, cur.reward
             else:
                 return cur, -math.inf
-        if cur not in self.children:
+        if cur not in self.children or not self.children[cur]:
             return cur, -math.inf
         max_n, max_r = max((self.max_terminal(child) for child in self.children[cur]), key=lambda x: x[1])
         return max_n, max_r + cur.reward
